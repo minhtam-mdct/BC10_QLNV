@@ -7,7 +7,7 @@ function getEle(id) {
 
 getLocalStorage();
 
-function dataInput(isAdd) {
+function dataInput(isAdd, isUpDate) {
     var _tkNV = getEle('tknv').value;
     var _tenNV = getEle('name').value;
     var _email = getEle('email').value;
@@ -18,9 +18,12 @@ function dataInput(isAdd) {
     var _gioLam = getEle('gioLam').value;
 
     var isValid = true;
-
     if (isAdd) {
+        if(isUpDate === false){
         isValid &= validation.kiemTraRong(_tkNV, "tbTKNV", "Tài khoản không được để trống") && validation.kiemTraDoDai(_tkNV, "tbTKNV", "Độ dài tối đa 4-6 ký số", 4, 6) && validation.kiemTraTrungTK(_tkNV, "tbTKNV", "Tài khoản đã tồn tại", dsnv.list);
+    } else {
+        isValid &= true;
+    }
 
         isValid &= validation.kiemTraRong(_tenNV, "tbTen", "Họ tên không được để trống") && validation.kiemTraTenNV(_tenNV, "tbTen", "Họ tên không đúng định dạng");
 
@@ -61,7 +64,7 @@ getEle('btnThem').addEventListener("click", function () {
 
 getEle('btnThemNV').addEventListener("click", function (event) {
     event.preventDefault();
-    var nhanVien = dataInput(true);
+    var nhanVien = dataInput(true, false);
     if (nhanVien) {
         nhanVien.tinhLuongTong();
         nhanVien.xepLoai();
@@ -141,8 +144,9 @@ getEle('searchName').addEventListener("keyup", function () {
     taoBang(mangTimKiem);
 })
 
-getEle('btnCapNhat').addEventListener("click", function () {
-    var nhanVien = dataInput(false);
+getEle('btnCapNhat').addEventListener("click", function (event) {
+    event.preventDefault();
+    var nhanVien = dataInput(true, true);
     nhanVien.tinhLuongTong();
     nhanVien.xepLoai();
     dsnv.capNhatNV(nhanVien);
