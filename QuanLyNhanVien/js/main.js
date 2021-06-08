@@ -7,7 +7,7 @@ function getEle(id) {
 
 getLocalStorage();
 
-function dataInput(isAdd, isUpDate) {
+function dataInput(isAdd) {
     var _tkNV = getEle('tknv').value;
     var _tenNV = getEle('name').value;
     var _email = getEle('email').value;
@@ -18,13 +18,10 @@ function dataInput(isAdd, isUpDate) {
     var _gioLam = getEle('gioLam').value;
 
     var isValid = true;
-    if (isAdd) {
-        if(isUpDate === false){
-        isValid &= validation.kiemTraRong(_tkNV, "tbTKNV", "Tài khoản không được để trống") && validation.kiemTraDoDai(_tkNV, "tbTKNV", "Độ dài tối đa 4-6 ký số", 4, 6) && validation.kiemTraTrungTK(_tkNV, "tbTKNV", "Tài khoản đã tồn tại", dsnv.list);
-    } else {
-        isValid &= true;
-    }
 
+    if (isAdd) {
+        isValid &= validation.kiemTraRong(_tkNV, "tbTKNV", "Tài khoản không được để trống") && validation.kiemTraDoDai(_tkNV, "tbTKNV", "Độ dài tối đa 4-6 ký số", 4, 6) && validation.kiemTraTrungTK(_tkNV, "tbTKNV", "Tài khoản đã tồn tại", dsnv.list);
+    }
         isValid &= validation.kiemTraRong(_tenNV, "tbTen", "Họ tên không được để trống") && validation.kiemTraTenNV(_tenNV, "tbTen", "Họ tên không đúng định dạng");
 
         isValid &= validation.kiemTraRong(_email, "tbEmail", "Email không đươc để trống") && validation.kiemTraEmail(_email, "tbEmail", "Email không đúng định dạng");
@@ -38,7 +35,7 @@ function dataInput(isAdd, isUpDate) {
         isValid &= validation.kiemTraChucVu('chucvu', "tbChucVu", "Hãy chọn chức vụ") && validation.kiemTraChucVuText(_chucVu, "tbChucVu", "Hãy nhập đúng chức vụ cho phép");
 
         isValid &= validation.kiemTraRong(_gioLam, "tbGiolam", "Giờ làm không được để trống") && validation.kiemTraSo(_gioLam, "tbGiolam", "Chỉ được phép nhập số") && validation.kiemTraGiaTri(_gioLam, "tbGiolam", "Số giờ làm phải từ 80 - 200 giờ", 80, 200);
-    }
+
     if (isValid) {
         var nhanVien = new NhanVien(
             _tkNV,
@@ -64,7 +61,7 @@ getEle('btnThem').addEventListener("click", function () {
 
 getEle('btnThemNV').addEventListener("click", function (event) {
     event.preventDefault();
-    var nhanVien = dataInput(true, false);
+    var nhanVien = dataInput(true);
     if (nhanVien) {
         nhanVien.tinhLuongTong();
         nhanVien.xepLoai();
@@ -137,6 +134,10 @@ function deleteNhanVien(tkNV) {
     setLocalStorage();
 }
 
+function addUser(){
+    console.log('minhtam2');
+}
+
 getEle('searchName').addEventListener("keyup", function () {
     var keywork = getEle('searchName').value;
 
@@ -144,15 +145,16 @@ getEle('searchName').addEventListener("keyup", function () {
     taoBang(mangTimKiem);
 })
 
-getEle('btnCapNhat').addEventListener("click", function (event) {
-    event.preventDefault();
-    var nhanVien = dataInput(true, true);
+getEle('btnCapNhat').addEventListener("click", function () {
+    var nhanVien = dataInput(false);
+    if(nhanVien){
     nhanVien.tinhLuongTong();
     nhanVien.xepLoai();
     dsnv.capNhatNV(nhanVien);
     taoBang(dsnv.list);
-
+    
     setLocalStorage();
+    }
 })
 
 
